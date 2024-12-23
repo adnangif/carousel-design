@@ -1,3 +1,94 @@
-.atext {
-    background-color: aqua;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Ubuntu", serif;
+    --primary-bg: #f9fafb;
+    --N: 7;
+    --X: 5;
+    --box-size: 100px;
+}
+
+body {
+    margin: auto;
+    max-width: 1080px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+main{
+    flex-grow: 1;
+}
+
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(var(--box-size)* -1 * var(--N)));
+    }
+}
+
+.slide-title{
+    font-weight: 600;
+    text-align: center;
+}
+
+.slide-description{
+    font-size: .75rem;
+    background-color: blanchedalmond;
+}
+
+.slider {
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    border: solid 2px red;
+}
+
+.slider .fading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.slider .fading::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(270deg, var(--primary-bg) 0%, rgba(9, 9, 121, 0) 35%, rgba(9, 9, 121, 0) 65%, var(--primary-bg) 100%);
+    z-index: 1;
+}
+
+.slider .slide-track {
+    /* animation: scroll 4s linear infinite; */
+    display: flex;
+    width: calc(100% / var(--X) * var(--N));
+    border: solid 2px green;
+    /* transform: translateX(calc(var(--box-size) * -1)); */
+}
+
+
+.slider img.slide {
+    height: auto;
+    width: calc(var(--box-size));
+    background-color: white;
+    border: solid 2px blueviolet;
+}
+
+.box {
+    min-height: var(--box-size);
+    min-width: var(--box-size);
+    background-color: white;
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border: solid 2px yellow;
 }

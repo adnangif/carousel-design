@@ -1,23 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple HTML Page</title>
     <link rel="stylesheet" href="my-styles.css">
     <script src="my-script.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <header>
         <h1>Welcome to My Simple HTML Page</h1>
     </header>
 
-    <main>
-        <p class="atext">This is the body of the page. You can add your content here.</p>
+    <main class="container">
+        <div id="start" class="slider item animate-hover lg:col-span-3 col-span-4 px-5 py-10 justify-end uppercase">
+            <div class="fading flex-1">
+                <div id="root" class="slide-track">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="carousel">
+            <!-- main content here -->
+        </div>
     </main>
 
     <footer>
         <p>&copy; 2024 My Website</p>
     </footer>
 </body>
+
 </html>
