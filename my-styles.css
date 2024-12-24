@@ -35,13 +35,13 @@ main{
 }
 
 .slide-title{
+    font-size: 1rem;
     font-weight: 600;
     text-align: center;
     color: darkred;
 }
 
 .slide-description{
-    font-size: .75rem;
     color: darkslategray;
 }
 
@@ -58,13 +58,13 @@ main{
     justify-content: center;
 }
 
-.slider .fading::before {
+/* .slider .fading::before {
     content: '';
     position: absolute;
     inset: 0;
-    /* background: linear-gradient(270deg, var(--primary-bg) 0%, rgba(9, 9, 121, 0) 35%, rgba(9, 9, 121, 0) 65%, var(--primary-bg) 100%); */
+    background: linear-gradient(270deg, var(--primary-bg) 0%, rgba(9, 9, 121, 0) 35%, rgba(9, 9, 121, 0) 65%, var(--primary-bg) 100%);
     z-index: 1;
-}
+} */
 
 .slider .slide-track {
     /* animation: scroll 4s linear infinite; */
@@ -125,9 +125,9 @@ main{
     position: absolute;
     z-index: 10;
 
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(4px);
-    border: none;
+    border: solid 2px white;
     border-radius: 50%;
     padding: 0.5rem;
     margin: 1rem;
@@ -135,13 +135,14 @@ main{
     transition-duration: 200ms;
     top: 50%;
     transform: translateY(-75%);
+
 }
 
 .btn-left{
     left: 0;
 }
 .btn-left:hover, .btn-right:hover{
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .btn-right{

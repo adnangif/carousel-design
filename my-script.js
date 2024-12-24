@@ -103,8 +103,13 @@ function getCurrentTranslateX(){
     return translateX
 }
 
+function getSlidingWidth() {
+    const slider = document.querySelector('.slider .slide-track');
+    return slider.offsetWidth / window.getComputedStyle(slider).getPropertyValue('--N');
+}
+
 function gotoNextSlideAction() {
-    const slideWidth = document.querySelector('.slide').offsetWidth;
+    const slideWidth = getSlidingWidth();
     const slider = document.querySelector('.slider .slide-track');
 
     const currentTranslateX = getCurrentTranslateX();
@@ -114,7 +119,7 @@ function gotoNextSlideAction() {
 
 
 function gotoPrevSlideAction() {
-    const slideWidth = document.querySelector('.slide').offsetWidth;
+    const slideWidth = getSlidingWidth();
     const slider = document.querySelector('.slider .slide-track');
 
     const currentTranslateX = getCurrentTranslateX();
