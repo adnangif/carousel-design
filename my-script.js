@@ -83,11 +83,23 @@ function main() {
         `
         carousel.appendChild(card);
     });
+
+    books.forEach(book => {
+        const card = document.createElement('div');
+        card.classList.add('box')
+        card.innerHTML = `
+            <img class="slide" src="/photos/${book.photo}" alt="${book.title}" />
+            <div class="slide-content">
+                <h5 class="slide-title">${book.title.split(':')[0]}</h5>
+                <p class="slide-description">${clipString(book.description, 100)}</p>
+            </div>
+        `
+        carousel.appendChild(card);
+    });
 };
 
 
-
-function getCurrentTranslateX(){
+function getCurrentTranslateX() {
     const slider = document.querySelector('.slider .slide-track');
 
     const computedStyle = window.getComputedStyle(slider);
@@ -97,7 +109,7 @@ function getCurrentTranslateX(){
 
     if (transform !== 'none') {
         const values = transform.match(/matrix\(([^)]+)\)/)[1].split(', ');
-        translateX = parseFloat(values[4]); 
+        translateX = parseFloat(values[4]);
     }
 
     return translateX
@@ -105,24 +117,32 @@ function getCurrentTranslateX(){
 
 function getSlidingWidth() {
     const slider = document.querySelector('.slider .slide-track');
-    return slider.offsetWidth / window.getComputedStyle(slider).getPropertyValue('--N');
+    return slider.offsetWidth / window.getComputedStyle(slider).getPropertyValue('--N') / 2;
 }
 
 function gotoNextSlideAction() {
+    const btnRight = document.querySelector('.nav-btn.btn-right');
+    btnRight.disabled = true
+    setTimeout(() => {
+        btnRight.disabled = false
+    },500)
+
     const slideWidth = getSlidingWidth();
     const slider = document.querySelector('.slider .slide-track');
-
     const currentTranslateX = getCurrentTranslateX();
-
     slider.style.transform = `translateX(${currentTranslateX - slideWidth}px)`;
 }
 
 
 function gotoPrevSlideAction() {
+    const btnLeft = document.querySelector('.nav-btn.btn-left');
+    btnLeft.disabled = true
+    setTimeout(() => {
+        btnLeft.disabled = false
+    },500)
+
     const slideWidth = getSlidingWidth();
     const slider = document.querySelector('.slider .slide-track');
-
     const currentTranslateX = getCurrentTranslateX();
-
     slider.style.transform = `translateX(${currentTranslateX + slideWidth}px)`;
 }

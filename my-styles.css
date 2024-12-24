@@ -5,8 +5,9 @@
     font-family: "Ubuntu", serif;
     --primary-bg: #f9fafb;
     --N: 7;
-    --X: 3;
-    --box-size: 100px;
+    --X: 4;
+    --box-size: 150px;
+    --slide-gap: 1rem;
 }
 
 body {
@@ -42,6 +43,7 @@ main{
 }
 
 .slide-description{
+    font-size: 0.725rem;
     color: darkslategray;
 }
 
@@ -54,6 +56,7 @@ main{
 
 .slider .fading {
     display: flex;
+    width: 100%;
     flex-direction: column;
     justify-content: center;
 }
@@ -69,13 +72,14 @@ main{
 .slider .slide-track {
     /* animation: scroll 4s linear infinite; */
     display: flex;
-    width: calc(100% / var(--X) * var(--N));
+    width: calc(100% / var(--X) * var(--N) * 2);
+    padding: 0 calc(var(--slide-gap)/2);
     border: solid 2px green;
-    /* transform: translateX(calc(var(--box-size) * -1)); */
-    transform: translateX(-50%);
+    transform: translateX(calc(100% / var(--N) * -0.25 - 100% / 2));
+
     max-height: 80vh;
-    gap: 1.5rem;
-    transition-duration: 200ms;
+    gap: var(--slide-gap);
+    transition: all 200ms ease-in-out;
 }
 
 
