@@ -5,7 +5,7 @@
     font-family: "Ubuntu", serif;
     --primary-bg: #f9fafb;
     --N: 7;
-    --X: 5;
+    --X: 3;
     --box-size: 100px;
 }
 
@@ -37,11 +37,12 @@ main{
 .slide-title{
     font-weight: 600;
     text-align: center;
+    color: darkred;
 }
 
 .slide-description{
     font-size: .75rem;
-    background-color: blanchedalmond;
+    color: darkslategray;
 }
 
 .slider {
@@ -61,7 +62,7 @@ main{
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(270deg, var(--primary-bg) 0%, rgba(9, 9, 121, 0) 35%, rgba(9, 9, 121, 0) 65%, var(--primary-bg) 100%);
+    /* background: linear-gradient(270deg, var(--primary-bg) 0%, rgba(9, 9, 121, 0) 35%, rgba(9, 9, 121, 0) 65%, var(--primary-bg) 100%); */
     z-index: 1;
 }
 
@@ -71,24 +72,78 @@ main{
     width: calc(100% / var(--X) * var(--N));
     border: solid 2px green;
     /* transform: translateX(calc(var(--box-size) * -1)); */
+    transform: translateX(-50%);
+    max-height: 80vh;
+    gap: 1.5rem;
+    transition-duration: 200ms;
 }
 
 
-.slider img.slide {
+/* .slider img.slide {
     height: auto;
     width: calc(var(--box-size));
     background-color: white;
     border: solid 2px blueviolet;
+} */
+
+.slide-content {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-grow: 1;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.slider img{
+    width: 100%;
 }
 
 .box {
-    min-height: var(--box-size);
+    position: relative;
     min-width: var(--box-size);
-    background-color: white;
+    background-color: black;
     flex:1;
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 0.5rem;
+    border: solid 2px black;
+    overflow: hidden;
 
-    border: solid 2px yellow;
+    /* border: solid 2px pink; */
+}
+
+
+.nav-btn{
+    position: absolute;
+    z-index: 10;
+
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    border: none;
+    border-radius: 50%;
+    padding: 0.5rem;
+    margin: 1rem;
+    transform-origin: top center;
+    transition-duration: 200ms;
+    top: 50%;
+    transform: translateY(-75%);
+}
+
+.btn-left{
+    left: 0;
+}
+.btn-left:hover, .btn-right:hover{
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.btn-right{
+    right: 0;
 }

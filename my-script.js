@@ -1,5 +1,5 @@
 
-function getBooks(){
+function getBooks() {
     const books = [
         {
             "id": 1,
@@ -59,10 +59,16 @@ window.onload = main
 
 function main() {
     books = getBooks()
-    const TOTAL_BOOKS = books.length 
+    const TOTAL_BOOKS = books.length
     const DISPLAYED_BOOKS = 4
-    
+
     const carousel = document.querySelector('#root');
+
+    const btnLeft = document.querySelector('.nav-btn.btn-left');
+    const btnRight = document.querySelector('.nav-btn.btn-right');
+
+    btnRight.addEventListener('click', gotoNextSlideAction)
+    btnLeft.addEventListener('click', gotoPrevSlideAction)
 
 
     books.forEach(book => {
@@ -70,9 +76,48 @@ function main() {
         card.classList.add('box')
         card.innerHTML = `
             <img class="slide" src="/photos/${book.photo}" alt="${book.title}" />
-            <h5 class="slide-title">${book.title.split(':')[0]}</h5>
-            <p class="slide-description">${clipString(book.description, 100)}</p>
+            <div class="slide-content">
+                <h5 class="slide-title">${book.title.split(':')[0]}</h5>
+                <p class="slide-description">${clipString(book.description, 100)}</p>
+            </div>
         `
         carousel.appendChild(card);
     });
 };
+
+
+
+function getCurrentTranslateX(){
+    const slider = document.querySelector('.slider .slide-track');
+
+    const computedStyle = window.getComputedStyle(slider);
+    const transform = computedStyle.transform;
+
+    let translateX = 0;
+
+    if (transform !== 'none') {
+        const values = transform.match(/matrix\(([^)]+)\)/)[1].split(', ');
+        translateX = parseFloat(values[4]); 
+    }
+
+    return translateX
+}
+
+function gotoNextSlideAction() {
+    const slideWidth = document.querySelector('.slide').offsetWidth;
+    const slider = document.querySelector('.slider .slide-track');
+
+    const currentTranslateX = getCurrentTranslateX();
+
+    slider.style.transform = `translateX(${currentTranslateX - slideWidth}px)`;
+}
+
+
+function gotoPrevSlideAction() {
+    const slideWidth = document.querySelector('.slide').offsetWidth;
+    const slider = document.querySelector('.slider .slide-track');
+
+    const currentTranslateX = getCurrentTranslateX();
+
+    slider.style.transform = `translateX(${currentTranslateX + slideWidth}px)`;
+}
