@@ -20,6 +20,7 @@ function main() {
     btnRight.addEventListener('click', gotoNextSlideAction)
     btnLeft.addEventListener('click', gotoPrevSlideAction)
     updateBtn.addEventListener('click', handleUpdate)
+    document.addEventListener('keydown', handleKeyPress)
 
     handleCarouselCreation(books.slice(0,n))
 };
@@ -81,6 +82,15 @@ function getBooks() {
     return books
 }
 
+
+function handleKeyPress(event) {
+    if (event.key === 'ArrowRight') {
+        gotoNextSlideAction()
+    } else if (event.key === 'ArrowLeft') {
+        gotoPrevSlideAction()
+    }
+}
+
 /**
  * Truncates a string to a specified maximum length and appends an ellipsis if necessary.
  * 
@@ -109,6 +119,7 @@ function clipString(str, maxLength) {
  * @param {Array<Object>} books - An array of book objects, each containing id, title, description, and photo attributes.
  */
 function handleCarouselCreation(books){
+    console.log('called handleCarouselCreation')
     const carousel = document.querySelector('#root');
     carousel.innerHTML = '';
 
@@ -253,19 +264,30 @@ function getLeftSlideCount(){
     return Math.floor(getCurrentTranslateX() * -1.0 / getSlidingWidth()) 
 }
 
+
+function throttle(){
+    if(!window.anchorTime){
+        return false
+    }
+
+    if(Date.now() - window.anchorTime < 400){
+        return true
+    }
+    return false
+}
+
 function gotoNextSlideAction() {
-    const btnRight = document.querySelector('.nav-btn.btn-right');
+    if(throttle()){
+        return
+    }
+    window.anchorTime = Date.now()
+
     const slider = document.querySelector('.slider .slide-track');
 
     const N = window.N
     const X = window.X
 
-    btnRight.disabled = true
-    setTimeout(() => {
-        btnRight.disabled = false
-    },500)
-
-    console.log(getLeftSlideCount() +parseInt(X)+1)
+    console.log(getLeftSlideCount())
 
     if (getLeftSlideCount() + X + 1 >= (N * 3)-2){
         setTimeout(() => {
@@ -282,13 +304,13 @@ function gotoNextSlideAction() {
 
 
 function gotoPrevSlideAction() {
-    const btnLeft = document.querySelector('.nav-btn.btn-left');
-    const slider = document.querySelector('.slider .slide-track');
+    if(throttle()){
+        return
+    }
+    window.anchorTime = Date.now()
 
-    btnLeft.disabled = true
-    setTimeout(() => {
-        btnLeft.disabled = false
-    },500)
+    console.log(getLeftSlideCount())
+    const slider = document.querySelector('.slider .slide-track');
 
     if (getLeftSlideCount() <= 1){
         setTimeout(() => {
