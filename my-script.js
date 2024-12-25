@@ -92,6 +92,19 @@ function main() {
         `
         carousel.appendChild(card);
     });
+
+    books.forEach(book => {
+        const card = document.createElement('div');
+        card.classList.add('box')
+        card.innerHTML = `
+            <img class="slide" src="/photos/${book.photo}" alt="${book.title}" />
+            <div class="slide-content">
+                <h5 class="slide-title">${book.title.split(':')[0]}</h5>
+                <p class="slide-description">${clipString(book.description, 100)}</p>
+            </div>
+        `
+        carousel.appendChild(card);
+    });
 };
 
 
@@ -113,7 +126,7 @@ function getCurrentTranslateX() {
 
 function getSlidingWidth() {
     const slider = document.querySelector('.slider .slide-track');
-    return slider.offsetWidth / window.getComputedStyle(slider).getPropertyValue('--N') / 2;
+    return slider.offsetWidth / (window.getComputedStyle(slider).getPropertyValue('--N') * 3.0);
 }
 
 function getLeftSlideCount(){
@@ -132,13 +145,13 @@ function gotoNextSlideAction() {
         btnRight.disabled = false
     },500)
 
-    // console.log(getLeftSlideCount() +parseInt(X)+1)
+    console.log(getLeftSlideCount() +parseInt(X)+1)
 
-    if (getLeftSlideCount() + X + 1 >= (N * 2)-1){
+    if (getLeftSlideCount() + X + 1 >= (N * 3)-2){
         setTimeout(() => {
             console.log("shifting LEFT")
             slider.style.transition = 'none';
-            slider.style.transform = `translateX(${getCurrentTranslateX() + slider.offsetWidth/2}px)`;
+            slider.style.transform = `translateX(${getCurrentTranslateX() + slider.offsetWidth/3}px)`;
         }, 250)
     }
 
@@ -161,7 +174,7 @@ function gotoPrevSlideAction() {
         setTimeout(() => {
             console.log("shifting RIGHT")
             slider.style.transition = 'none';
-            slider.style.transform = `translateX(${getCurrentTranslateX() - slider.offsetWidth/2}px)`;
+            slider.style.transform = `translateX(${getCurrentTranslateX() - slider.offsetWidth/3}px)`;
         }, 250)
     }
 

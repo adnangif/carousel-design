@@ -5,8 +5,8 @@
     font-family: "Ubuntu", serif;
     --primary-bg: #f9fafb;
     --N: 7;
-    --X: 5;
-    --box-size: 150px;
+    --X: 3;
+    --box-size: 100px;
     --slide-gap: 1rem;
 }
 
@@ -72,10 +72,10 @@ main{
 .slider .slide-track {
     /* animation: scroll 4s linear infinite; */
     display: flex;
-    width: calc(100% / var(--X) * var(--N) * 2);
+    width: calc(100% / var(--X) * var(--N) * 3);
     padding: 0 calc(var(--slide-gap)/2);
     border: solid 2px green;
-    transform: translateX(calc(100% / var(--N) * -0.25 - 100% / 2));
+    transform: translateX(calc(100% / var(--N)/-2/3 - 100% / 3));
 
     max-height: 80vh;
     gap: var(--slide-gap);
