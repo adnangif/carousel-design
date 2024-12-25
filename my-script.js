@@ -178,10 +178,11 @@ function handleCarouselCreation(books){
     });
 
     books.forEach(book => {
+        console.log(window.location.pathname)
         const card = document.createElement('div');
         card.classList.add('box')
         card.innerHTML = `
-            <img class="slide" src="${window.location.href}photos/${book.photo}" alt="${book.title}" />
+            <img class="slide" src="${window.location.pathname}photos/${book.photo}" alt="${book.title}" />
             <div class="slide-content">
                 <h5 class="slide-title">${book.title.split(':')[0]}</h5>
                 <p class="slide-description">${clipString(book.description, 100)}</p>
