@@ -4,10 +4,14 @@
     box-sizing: border-box;
     font-family: "Ubuntu", serif;
     --primary-bg: #f9fafb;
+    --primary-bg2: #ffffff;
+    --primary-fg: #4a00ff;
+    --primary-fg2: #3f00e7;
     --N: 7;
     --X: 3;
     --box-size: 100px;
     --slide-gap: 2rem;
+    --roundness: 0.25rem;
 }
 
 #start {
@@ -32,6 +36,9 @@ table {
     width: 100%;
     max-width: 500px;
     border-collapse: collapse;
+    background-color: var(--primary-bg);
+    border-radius: var(--roundness);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
 th,
@@ -40,10 +47,27 @@ td {
 }
 
 button {
-    padding: 0.25rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-fg);
+    color: var(--primary-bg);
+    outline: none;
+    border: none;
+    border-radius: var(--roundness);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+    &:hover{
+        cursor: pointer;
+        background-color: var(--primary-fg2);
+    }
 }
 
-/* Chrome, Safari, Edge, Opera */
+input{
+    padding: 0.25rem;
+    border-radius: var(--roundness);
+    border: solid 1px var(--primary-fg);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
