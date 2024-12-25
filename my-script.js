@@ -59,11 +59,7 @@ window.onload = main
 
 function main() {
     books = getBooks()
-    const TOTAL_BOOKS = books.length
-    const DISPLAYED_BOOKS = 4
-
     const carousel = document.querySelector('#root');
-
     const btnLeft = document.querySelector('.nav-btn.btn-left');
     const btnRight = document.querySelector('.nav-btn.btn-right');
 
@@ -120,29 +116,55 @@ function getSlidingWidth() {
     return slider.offsetWidth / window.getComputedStyle(slider).getPropertyValue('--N') / 2;
 }
 
+function getLeftSlideCount(){
+    return Math.floor(getCurrentTranslateX() * -1.0 / getSlidingWidth()) 
+}
+
 function gotoNextSlideAction() {
     const btnRight = document.querySelector('.nav-btn.btn-right');
+    const slider = document.querySelector('.slider .slide-track');
+
+    const N = parseInt(window.getComputedStyle(slider).getPropertyValue('--N'))
+    const X = parseInt(window.getComputedStyle(slider).getPropertyValue('--X'));
+
     btnRight.disabled = true
     setTimeout(() => {
         btnRight.disabled = false
     },500)
 
-    const slideWidth = getSlidingWidth();
-    const slider = document.querySelector('.slider .slide-track');
-    const currentTranslateX = getCurrentTranslateX();
-    slider.style.transform = `translateX(${currentTranslateX - slideWidth}px)`;
+    // console.log(getLeftSlideCount() +parseInt(X)+1)
+
+    if (getLeftSlideCount() + X + 1 >= (N * 2)-1){
+        setTimeout(() => {
+            console.log("shifting LEFT")
+            slider.style.transition = 'none';
+            slider.style.transform = `translateX(${getCurrentTranslateX() + slider.offsetWidth/2}px)`;
+        }, 250)
+    }
+
+
+    slider.style.transition = 'all 200ms ease-in-out';
+    slider.style.transform = `translateX(${getCurrentTranslateX() - getSlidingWidth()}px)`;
 }
 
 
 function gotoPrevSlideAction() {
     const btnLeft = document.querySelector('.nav-btn.btn-left');
+    const slider = document.querySelector('.slider .slide-track');
+
     btnLeft.disabled = true
     setTimeout(() => {
         btnLeft.disabled = false
     },500)
 
-    const slideWidth = getSlidingWidth();
-    const slider = document.querySelector('.slider .slide-track');
-    const currentTranslateX = getCurrentTranslateX();
-    slider.style.transform = `translateX(${currentTranslateX + slideWidth}px)`;
+    if (getLeftSlideCount() <= 1){
+        setTimeout(() => {
+            console.log("shifting RIGHT")
+            slider.style.transition = 'none';
+            slider.style.transform = `translateX(${getCurrentTranslateX() - slider.offsetWidth/2}px)`;
+        }, 250)
+    }
+
+    slider.style.transition = 'all 200ms ease-in-out';
+    slider.style.transform = `translateX(${getCurrentTranslateX()+ getSlidingWidth()}px)`;
 }
