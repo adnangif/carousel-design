@@ -7,10 +7,10 @@
     --N: 7;
     --X: 3;
     --box-size: 100px;
-    --slide-gap: 1rem;
+    --slide-gap: 2rem;
 }
 
-#start{
+#start {
     /* display: none; */
 }
 
@@ -29,7 +29,8 @@ main {
 }
 
 table {
-    width: 50%;
+    width: 100%;
+    max-width: 500px;
     border-collapse: collapse;
 }
 
@@ -38,20 +39,20 @@ td {
     padding: 8px;
 }
 
-button{
+button {
     padding: 0.25rem;
 }
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Firefox */
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 @keyframes scroll {
@@ -73,6 +74,10 @@ input[type=number] {
 
 .slide-description {
     font-size: 0.725rem;
+    color: darkslategray;
+}
+
+.subtitle{
     color: darkslategray;
 }
 
@@ -106,7 +111,7 @@ input[type=number] {
     border: solid 2px green;
     transform: translateX(calc(100% / var(--N)/-2/3 - 100% / 3));
 
-    max-height: 70vh;
+    max-height: 65vh;
     gap: var(--slide-gap);
     transition: all 200ms ease-in-out;
 }

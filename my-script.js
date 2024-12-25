@@ -9,7 +9,15 @@ window.onload = main
 function main() {
     books = getBooks()
     const n = parseInt(document.querySelector('#value-of-n').value)
-    const x = parseInt(document.querySelector('#value-of-x').value)
+    let x = 0
+
+    if(isMobileDevice()){
+        x = 1
+    }else{
+        x = 3
+    }
+
+    document.querySelector('#value-of-x').value = x
 
     setupVariables(n, x)
 
@@ -80,6 +88,11 @@ function getBooks() {
 
 
     return books
+}
+
+
+function isMobileDevice() {
+    return window.innerWidth <= 768; // Adjust breakpoint as needed
 }
 
 
