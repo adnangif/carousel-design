@@ -1,4 +1,36 @@
+window.onload = main
 
+/**
+ * Initializes the carousel by getting the list of books, setting up the initial variables,
+ * adding event listeners to the navigation buttons, and creating the carousel elements.
+ * 
+ * Called automatically when the window finishes loading.
+ */
+function main() {
+    books = getBooks()
+    const n = parseInt(document.querySelector('#value-of-n').value)
+    const x = parseInt(document.querySelector('#value-of-x').value)
+
+    setupVariables(n, x)
+
+    const btnLeft = document.querySelector('.nav-btn.btn-left');
+    const btnRight = document.querySelector('.nav-btn.btn-right');
+    const updateBtn = document.querySelector('#update-btn');
+
+    btnRight.addEventListener('click', gotoNextSlideAction)
+    btnLeft.addEventListener('click', gotoPrevSlideAction)
+    updateBtn.addEventListener('click', handleUpdate)
+
+    handleCarouselCreation(books.slice(0,n))
+};
+
+
+/**
+ * Returns an array of objects each with id, title, description, and photo attributes.
+ * The objects represent books with unique ids, titles, descriptions, and photos.
+ * The returned array is used to populate the slider with book cards.
+ * @returns {Array<{id: number, title: string, description: string, photo: string}>} An array of book objects.
+ */
 function getBooks() {
     const books = [
     {
@@ -49,6 +81,14 @@ function getBooks() {
     return books
 }
 
+/**
+ * Truncates a string to a specified maximum length and appends an ellipsis if necessary.
+ * 
+ * @param {string} str - The string to be truncated.
+ * @param {number} maxLength - The maximum allowed length of the string.
+ * @returns {string} - The truncated string with an ellipsis if it exceeds the maxLength, or the original string if it does not.
+ */
+
 function clipString(str, maxLength) {
     if (str.length > maxLength) {
         return str.slice(0, maxLength) + '...'; // Truncate and add ellipsis
@@ -56,24 +96,21 @@ function clipString(str, maxLength) {
     return str; // Return the original string if it's shorter than maxLength
 }
 
-window.onload = main
 
-function main() {
-    books = getBooks()
-    setupVariables(books.length, 4)
 
+
+/**
+ * Creates a carousel by appending card elements to the root element.
+ * 
+ * Each card is created by iterating over the books array and setting the innerHTML
+ * of the card to a template literal containing the book's photo, title and description.
+ * The card is then appended to the root element.
+ * 
+ * @param {Array<Object>} books - An array of book objects, each containing id, title, description, and photo attributes.
+ */
+function handleCarouselCreation(books){
     const carousel = document.querySelector('#root');
-    const btnLeft = document.querySelector('.nav-btn.btn-left');
-    const btnRight = document.querySelector('.nav-btn.btn-right');
-    const updateBtn = document.querySelector('#update-btn');
-    const valueOfN = document.querySelector('#value-of-n');
-
-    btnRight.addEventListener('click', gotoNextSlideAction)
-    btnLeft.addEventListener('click', gotoPrevSlideAction)
-    updateBtn.addEventListener('click', handleUpdateX)
-    valueOfN.textContent = books.length
-
-
+    carousel.innerHTML = '';
 
     books.forEach(book => {
         const card = document.createElement('div');
@@ -113,21 +150,54 @@ function main() {
         `
         carousel.appendChild(card);
     });
-};
-
-
-function handleUpdateX(){
-    const x = parseInt(document.querySelector('#value-of-x').value)
-    setupVariables(window.N, x)
 }
 
+/**
+ * Updates the carousel based on the values of N and X in the inputs.
+ * 
+ * This function is called whenever the user updates the values of N and X.
+ * It first parses the values of N and X from the inputs.
+ * 
+ * If X is not within the range of 1 to N-1, it is set to the midpoint of N.
+ * If N is greater than the number of books, an alert is thrown.
+ * 
+ * Otherwise, the global variables N and X are set, and the carousel is recreated
+ * with the first N books.
+ */
+function handleUpdate(){
+    const n = parseInt(document.querySelector('#value-of-n').value)
+    const x = parseInt(document.querySelector('#value-of-x').value)
 
-function setupVariables(n, x) { 
+
     if(x < 1 || x >= n){
         alert("X should be between 1 and N-1")
         x = Math.floor(n / 2);
     }
+    else if(n > getBooks().length){
+        alert("N should be less than or equal to the number of books")
+    }
+    else{
+        setupVariables(n, x)
+        handleCarouselCreation(books.slice(0,n))
+    }
+}
 
+
+/**
+ * Configures global variables and updates the slider's presentation.
+ * 
+ * This function sets the global variables `N` and `X` based on the provided
+ * parameters. It ensures that `X` is a valid value between 1 and `N-1`. If
+ * `X` is not within this range, it defaults to the midpoint of `N`.
+ * 
+ * The function then updates the width and initial transform of the slider
+ * track based on the new values of `N` and `X`.
+ * 
+ * @param {number} n - The total number of items in the carousel.
+ * @param {number} x - The number of visible items in the carousel at a time.
+ */
+
+function setupVariables(n, x) { 
     x++
     window.N = n
     window.X = x
@@ -136,6 +206,16 @@ function setupVariables(n, x) {
 }
 
 
+/**
+ * Retrieves the current horizontal translation of the slider track.
+ * 
+ * This function first checks if the slider track has a transform style set.
+ * If it does, it then parses the transform matrix to retrieve the horizontal
+ * translation of the slider track. If the transform is not set, it defaults
+ * to 0.
+ * 
+ * @returns {number} The current horizontal translation of the slider track.
+ */
 function getCurrentTranslateX() {
     const slider = document.querySelector('.slider .slide-track');
 
@@ -152,10 +232,22 @@ function getCurrentTranslateX() {
     return translateX
 }
 
+/**
+ * Calculates the width of a single slide in the slider track.
+ * 
+ * This function first selects the slider track element. It then returns the
+ * offset width of the slider track divided by the number of slides multiplied
+ * by 3. This division is necessary because the slider track is set to be 3
+ * times the width of the slider container, and the width of each slide is
+ * calculated by dividing the width of the slider track by the number of slides.
+ * 
+ * @returns {number} The width of a single slide in the slider track.
+ */
 function getSlidingWidth() {
     const slider = document.querySelector('.slider .slide-track');
     return slider.offsetWidth / (window.N * 3.0);
 }
+
 
 function getLeftSlideCount(){
     return Math.floor(getCurrentTranslateX() * -1.0 / getSlidingWidth()) 

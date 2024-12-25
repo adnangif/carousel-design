@@ -10,6 +10,10 @@
     --slide-gap: 1rem;
 }
 
+#start{
+    /* display: none; */
+}
+
 body {
     margin: auto;
     max-width: 1080px;
