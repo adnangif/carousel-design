@@ -91,11 +91,26 @@ function getBooks() {
 }
 
 
+/**
+ * Checks if the current device is a mobile device.
+ * @returns {boolean} Whether the current device is a mobile device.
+ * @todo Adjust breakpoint as needed.
+ */
 function isMobileDevice() {
     return window.innerWidth <= 768; // Adjust breakpoint as needed
 }
 
 
+/**
+ * Handles keyboard events for arrow key presses.
+ * 
+ * This function listens for 'ArrowRight' and 'ArrowLeft' key presses.
+ * When the 'ArrowRight' key is pressed, it triggers the action to go
+ * to the next slide in the carousel. When the 'ArrowLeft' key is pressed,
+ * it triggers the action to go to the previous slide.
+ * 
+ * @param {Event} event - The keyboard event triggered by a key press.
+ */
 function handleKeyPress(event) {
     if (event.key === 'ArrowRight') {
         gotoNextSlideAction()
@@ -104,14 +119,14 @@ function handleKeyPress(event) {
     }
 }
 
+
 /**
  * Truncates a string to a specified maximum length and appends an ellipsis if necessary.
- * 
+ *
  * @param {string} str - The string to be truncated.
  * @param {number} maxLength - The maximum allowed length of the string.
  * @returns {string} - The truncated string with an ellipsis if it exceeds the maxLength, or the original string if it does not.
  */
-
 function clipString(str, maxLength) {
     if (str.length > maxLength) {
         return str.slice(0, maxLength) + '...'; // Truncate and add ellipsis
@@ -208,19 +223,18 @@ function handleUpdate(){
 
 
 /**
- * Configures global variables and updates the slider's presentation.
+ * Sets up the global variables N and X, and updates the style of the slider track element based on N and X.
  * 
- * This function sets the global variables `N` and `X` based on the provided
- * parameters. It ensures that `X` is a valid value between 1 and `N-1`. If
- * `X` is not within this range, it defaults to the midpoint of `N`.
+ * This function first increments X to account for the 0-based indexing used in the CSS calculations.
+ * It then sets the global variables N and X to the values passed as arguments.
  * 
- * The function then updates the width and initial transform of the slider
- * track based on the new values of `N` and `X`.
+ * Finally, it updates the width and transform styles of the slider track element based on the values of N and X.
+ * The width of the slider track is set to the width of each slide multiplied by N and divided by X.
+ * The transform of the slider track is set to the negative of the width of each slide divided by N and multiplied by 2/3, offset by the width of one slide.
  * 
- * @param {number} n - The total number of items in the carousel.
- * @param {number} x - The number of visible items in the carousel at a time.
+ * @param {number} n - The number of slides to display in the carousel.
+ * @param {number} x - The index of the slide to display as the first slide.
  */
-
 function setupVariables(n, x) { 
     x++
     window.N = n
@@ -273,11 +287,31 @@ function getSlidingWidth() {
 }
 
 
+/**
+ * Calculates the number of slides to the left of the current position.
+ * 
+ * This function uses the current horizontal translation of the slider track
+ * to calculate the number of slides that are to the left of the current
+ * position. It does this by dividing the absolute value of the horizontal
+ * translation by the width of a single slide, and then flooring the result
+ * to the nearest whole number.
+ * 
+ * @returns {number} The number of slides to the left of the current position.
+ */
 function getLeftSlideCount(){
     return Math.floor(getCurrentTranslateX() * -1.0 / getSlidingWidth()) 
 }
 
 
+/**
+ * Returns true if the time elapsed since the last anchor time is less than 400ms,
+ * and false otherwise.
+ * 
+ * This function is used to throttle the gotoNextSlideAction and gotoPrevSlideAction
+ * functions, so that they are not called more than once every 400ms.
+ * 
+ * @returns {boolean} - Whether the time elapsed since the last anchor time is less than 400ms.
+ */
 function throttle(){
     if(!window.anchorTime){
         return false
@@ -289,6 +323,20 @@ function throttle(){
     return false
 }
 
+/**
+ * Moves the slider to the next slide.
+ * 
+ * This function moves the slider to the next slide by adjusting the horizontal
+ * translation of the slider track. It does this by first checking if the time
+ * elapsed since the last anchor time is less than 400ms, in which case it does
+ * not do anything. If the time elapsed since the last anchor time is greater
+ * than 400ms, it sets the new anchor time, and then adjusts the horizontal
+ * translation of the slider track. If the number of slides to the left of the
+ * current position plus X plus 1 is greater than or equal to N*3-2, it also
+ * triggers a left shift after a 250ms delay. Otherwise, it does nothing.
+ * 
+ * @returns {undefined} - This function does not return anything.
+ */
 function gotoNextSlideAction() {
     if(throttle()){
         return
@@ -316,6 +364,20 @@ function gotoNextSlideAction() {
 }
 
 
+/**
+ * Moves the slider to the previous slide.
+ * 
+ * This function moves the slider to the previous slide by adjusting the horizontal
+ * translation of the slider track. It does this by first checking if the time
+ * elapsed since the last anchor time is less than 400ms, in which case it does
+ * not do anything. If the time elapsed since the last anchor time is greater
+ * than 400ms, it sets the new anchor time, and then adjusts the horizontal
+ * translation of the slider track. If the number of slides to the left of the
+ * current position is less than or equal to 1, it also triggers a right shift
+ * after a 250ms delay. Otherwise, it does nothing.
+ * 
+ * @returns {undefined} - This function does not return anything.
+ */
 function gotoPrevSlideAction() {
     if(throttle()){
         return
