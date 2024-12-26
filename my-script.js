@@ -187,7 +187,7 @@ function makeSlides(books, carousel){
  */
 function handleUpdate(){
     const n = parseInt(document.querySelector('#value-of-n').value)
-    const x = parseInt(document.querySelector('#value-of-x').value)
+    let x = parseInt(document.querySelector('#value-of-x').value)
 
 
     if(x < 1 || x >= n){
@@ -218,10 +218,9 @@ function handleUpdate(){
  * @param {number} x - The index of the slide to display as the first slide.
  */
 function setupVariables(n, x) { 
-    x++
     window.N = n
     window.X = x
-    document.querySelector('.slider .slide-track').style.width = `calc(100% / ${x} * ${n} * 3)`;
+    document.querySelector('.slider .slide-track').style.width = `calc(100% / ${x+1} * ${n} * 3)`;
     document.querySelector('.slider .slide-track').style.transform = `translateX(calc(100% / ${n}/2/3 - 100% / 3))`;
 
     removeBoxAnimation()
@@ -336,7 +335,7 @@ function gotoNextSlideAction() {
     const N = window.N
     const X = window.X
 
-    if (getLeftSlideCount() + X + 1 >= (N * 3)-2){
+    if (getLeftSlideCount() + X + 2 >= (N * 3)-2){
         setTimeout(() => {
             console.log("shifting LEFT")
             slider.style.transition = 'none';
@@ -396,7 +395,6 @@ function removeBoxAnimation(){
 }
 
 function handleBoxAnimationToggle(nextTaget, n, x){
-    x--
     const boxes = document.querySelectorAll('.box')
 
 
