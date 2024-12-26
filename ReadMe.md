@@ -3,6 +3,9 @@
 ## Overview
 This project is a dynamic, responsive, and auto-rotating carousel built with vanilla JavaScript. The carousel displays a configurable number of slides (n) with a user-defined number of visible slides (x). It is optimized for desktop and mobile devices, supports keyboard navigation, and includes pagination and auto-rotation features.
 
+## Demo 
+Visit [this link](https://adnangif.github.io/carousel-design/) to see the working demo of the Design.
+
 ## Features
 
 ### Dynamic Configuration
