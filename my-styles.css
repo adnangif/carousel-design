@@ -223,7 +223,7 @@ input[type=number] {
 .box {
     position: relative;
     min-width: var(--box-size);
-    max-height: var(--image-height);
+    /* max-height: var(--image-height); */
     border: solid 2px gray;
     box-shadow: var(--shadow);
     object-fit: cover;
