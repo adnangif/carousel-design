@@ -1,10 +1,15 @@
 window.onload = main
 
 /**
- * Initializes the carousel by getting the list of books, setting up the initial variables,
- * adding event listeners to the navigation buttons, and creating the carousel elements.
- * 
- * Called automatically when the window finishes loading.
+ * The main function is the entry point of the script.
+ * It is responsible for setting up the variables and event listeners,
+ * and for initializing the carousel.
+ *
+ * It first gets the list of books from the JSON file.
+ * Then it sets the value of X based on whether the device is mobile or not.
+ * It then sets up the event listeners for the navigation buttons and the update button.
+ * Finally, it calls the functions to create the carousel, set up the variables,
+ * update the pagination and start the auto-rotation.
  */
 function main() {
     books = getBooks()
@@ -37,6 +42,11 @@ function main() {
 };
 
 
+/**
+ * Checks if the time elapsed since the last anchor time is less than 3000ms,
+ * and if so, calls the gotoNextSlideAction function to move to the next slide.
+ * This is used to implement the auto-rotation feature of the carousel.
+ */
 function handleAutoRotation(){
     if(!window.anchorTime || Date.now() - window.anchorTime >= 3000){
         gotoNextSlideAction()
@@ -44,6 +54,16 @@ function handleAutoRotation(){
 }
 
 
+/**
+ * Updates the pagination of the carousel based on the current slide number.
+ * 
+ * This function is called whenever the user navigates to a different slide.
+ * It first calculates the current slide number modulo N to ensure that it is
+ * within the range of 0 to N-1.
+ * 
+ * Then it toggles the active state of the dots corresponding to the current
+ * slide and the next X-1 slides.
+ */
 function updatePagination(current, n,x){
     let currentSlide = current
     const dots = document.querySelectorAll('.dot')
@@ -163,13 +183,14 @@ function clipString(str, maxLength) {
 
 
 /**
- * Creates a carousel by appending card elements to the root element.
+ * Creates the carousel with the given list of books.
  * 
- * Each card is created by iterating over the books array and setting the innerHTML
- * of the card to a template literal containing the book's photo, title and description.
- * The card is then appended to the root element.
+ * This function is called whenever the list of books in the carousel needs to be updated.
+ * It first empties the carousel and then calls the makeSlides function three times to add
+ * the list of books to the carousel three times. Finally, it calls the makePagination
+ * function to create the pagination dots.
  * 
- * @param {Array<Object>} books - An array of book objects, each containing id, title, description, and photo attributes.
+ * @param {object[]} books - The list of books to be added to the carousel.
  */
 function handleCarouselCreation(books){
     console.log('called handleCarouselCreation')
@@ -183,6 +204,16 @@ function handleCarouselCreation(books){
 }
 
 
+/**
+ * Creates pagination dots for the carousel.
+ * 
+ * This function generates a series of pagination dots and appends them
+ * to the pagination container in the DOM. Each dot represents a slide
+ * in the carousel, and the number of dots created is determined by the 
+ * parameter `n`.
+ * 
+ * @param {number} n - The number of pagination dots to create.
+ */
 function makePagination(n){
     const pagination = document.querySelector('#pagination')
     pagination.innerHTML = ''
@@ -192,6 +223,19 @@ function makePagination(n){
         pagination.appendChild(dot);
     }
 }
+
+
+/**
+ * Creates a series of carousel slides from the given list of books.
+ * 
+ * This function iterates over the given list of books and creates a carousel slide
+ * for each one. The slide contains an image of the book, as well as a title and
+ * description. Finally, the slide is appended to the given carousel container
+ * in the DOM.
+ * 
+ * @param {object[]} books - The list of books from which to create the carousel slides.
+ * @param {HTMLElement} carousel - The container element in the DOM in which to append the slides.
+ */
 function makeSlides(books, carousel){
     books.forEach(book => {
         const card = document.createElement('div');
@@ -209,17 +253,18 @@ function makeSlides(books, carousel){
 
 }
 
+
+
+
 /**
- * Updates the carousel based on the values of N and X in the inputs.
+ * Handles the update button click event.
  * 
- * This function is called whenever the user updates the values of N and X.
- * It first parses the values of N and X from the inputs.
- * 
- * If X is not within the range of 1 to N-1, it is set to the midpoint of N.
- * If N is greater than the number of books, an alert is thrown.
- * 
- * Otherwise, the global variables N and X are set, and the carousel is recreated
- * with the first N books.
+ * This function first gets the current values of N and X from the input fields.
+ * It then checks if X is between 1 and N-1, and if N is less than or equal to the
+ * number of books. If either of these conditions is not met, it alerts the user
+ * and sets the value of X to the middle of the range of N.
+ * If both conditions are met, it calls the setupVariables, handleCarouselCreation and
+ * updatePagination functions to update the carousel.
  */
 function handleUpdate(){
     const n = parseInt(document.querySelector('#value-of-n').value)
@@ -430,6 +475,12 @@ function gotoPrevSlideAction() {
 }
 
 
+/**
+ * Adds the 'blurr' class to all elements with the class 'box'.
+ * This is used to toggle the box animation when the user navigates to a different slide.
+ * 
+ * @returns {undefined} - This function does not return anything.
+ */
 function removeBoxAnimation(){
     const boxes = document.querySelectorAll('.box')
     for(let i = 0; i < boxes.length; i++){
@@ -437,6 +488,18 @@ function removeBoxAnimation(){
     }
 }
 
+/**
+ * Toggles the 'blurr' class on the boxes that are currently in view.
+ * 
+ * This function calculates the current box index based on the next target
+ * and the number of slides `n`. It then iterates over the boxes in the 
+ * carousel and toggles the 'blurr' class on the boxes that should be visible 
+ * based on the index `nextTaget` and the number of visible slides `x`.
+ * 
+ * @param {number} nextTaget - The index of the next target slide.
+ * @param {number} n - The total number of slides in one full cycle of the carousel.
+ * @param {number} x - The number of slides to display at once.
+ */
 function handleBoxAnimationToggle(nextTaget, n, x){
     const boxes = document.querySelectorAll('.box')
 
