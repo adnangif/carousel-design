@@ -33,7 +33,15 @@ function main() {
     setupVariables(n, x)
     updatePagination(0,n,x)
 
+    setInterval(handleAutoRotation, 5000)
 };
+
+
+function handleAutoRotation(){
+    if(!window.anchorTime || Date.now() - window.anchorTime >= 3000){
+        gotoNextSlideAction()
+    }
+}
 
 
 function updatePagination(current, n,x){
@@ -45,7 +53,6 @@ function updatePagination(current, n,x){
     }
 
     for(let i = currentSlide; i < currentSlide + x; i++){
-        console.log(`now working at pagination ${i}`)
         dots[i%n].classList.toggle('active-dot')
 
     }
