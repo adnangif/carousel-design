@@ -200,7 +200,7 @@ input[type=number] {
 
 .slider .box img {
     width: 100%;
-    max-height: 50vh;
+    max-height: 40vh;
     object-fit: cover; /* Ensures the image fills the container */
     object-position: center; 
     transition: all 200ms ease-in-out;
