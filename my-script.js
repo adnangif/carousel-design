@@ -19,7 +19,6 @@ function main() {
 
     document.querySelector('#value-of-x').value = x
 
-    setupVariables(n, x)
 
     const btnLeft = document.querySelector('.nav-btn.btn-left');
     const btnRight = document.querySelector('.nav-btn.btn-right');
@@ -31,6 +30,7 @@ function main() {
     document.addEventListener('keydown', handleKeyPress)
 
     handleCarouselCreation(books.slice(0,n))
+    setupVariables(n, x)
 };
 
 
@@ -160,6 +160,7 @@ function makeSlides(books, carousel){
     books.forEach(book => {
         const card = document.createElement('div');
         card.classList.add('box')
+        card.classList.add('blurr')
         card.innerHTML = `
             <img class="slide" src="${window.location.pathname}photos/${book.photo}" alt="${book.title}" />
             <div class="slide-content">
@@ -222,6 +223,12 @@ function setupVariables(n, x) {
     window.X = x
     document.querySelector('.slider .slide-track').style.width = `calc(100% / ${x} * ${n} * 3)`;
     document.querySelector('.slider .slide-track').style.transform = `translateX(calc(100% / ${n}/-2/3 - 100% / 3))`;
+
+    removeBoxAnimation()
+    setTimeout(() => {
+        handleBoxAnimationToggle(n+1, n, x)
+    }, 100);
+
 }
 
 
@@ -329,8 +336,6 @@ function gotoNextSlideAction() {
     const N = window.N
     const X = window.X
 
-    console.log(getLeftSlideCount())
-
     if (getLeftSlideCount() + X + 1 >= (N * 3)-2){
         setTimeout(() => {
             console.log("shifting LEFT")
@@ -339,10 +344,12 @@ function gotoNextSlideAction() {
         }, 250)
     }
 
-
+    handleBoxAnimationToggle(getLeftSlideCount() + 1, N, X)
+    handleBoxAnimationToggle(getLeftSlideCount() + 2, N, X)
     slider.style.transition = 'all 200ms ease-in-out';
     slider.style.transform = `translateX(${getCurrentTranslateX() - getSlidingWidth()}px)`;
 }
+
 
 
 /**
@@ -364,8 +371,6 @@ function gotoPrevSlideAction() {
         return
     }
     window.anchorTime = Date.now()
-
-    console.log(getLeftSlideCount())
     const slider = document.querySelector('.slider .slide-track');
 
     if (getLeftSlideCount() <= 1){
@@ -376,6 +381,32 @@ function gotoPrevSlideAction() {
         }, 250)
     }
 
+    handleBoxAnimationToggle(getLeftSlideCount() + 1, N, X)
+    handleBoxAnimationToggle(getLeftSlideCount(), N, X)
     slider.style.transition = 'all 200ms ease-in-out';
     slider.style.transform = `translateX(${getCurrentTranslateX()+ getSlidingWidth()}px)`;
+}
+
+
+function removeBoxAnimation(){
+    const boxes = document.querySelectorAll('.box')
+    for(let i = 0; i < 3*window.N; i++){
+        boxes[i].classList.add('blurr')
+    }
+}
+
+function handleBoxAnimationToggle(nextTaget, n, x){
+    x--
+    const boxes = document.querySelectorAll('.box')
+
+
+    let currentBox = nextTaget
+    while(currentBox - n >= 0)
+        currentBox -= n
+
+    for(let i = currentBox; i < 3*n; i=i+n){
+        for(let j = 0;j < x && i+j < 3*n;j++){
+            boxes[i+j].classList.toggle('blurr')
+        }
+    }
 }

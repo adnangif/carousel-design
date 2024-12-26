@@ -13,6 +13,7 @@
     --slide-gap: 2rem;
     --roundness: 0.25rem;
     --image-height: 50vh;
+    --in-view-slide-no: 9;
 }
 
 #start {
@@ -209,8 +210,12 @@ input[type=number] {
     border-radius: var(--roundness);
     /* border: solid 2px black; */
     overflow: hidden;
-
+    transition: all 200ms ease-in-out;
     /* border: solid 2px pink; */
+}
+
+.blurr{
+    filter: blur(5px);
 }
 
 
