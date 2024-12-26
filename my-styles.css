@@ -28,7 +28,6 @@ body {
     flex-direction: column;
     padding: 1rem;
     gap: 1rem;
-    border: solid 2px gold;
 }
 
 main {
@@ -160,7 +159,6 @@ input[type=number] {
     overflow: hidden;
     position: relative;
     display: flex;
-    border: solid 2px red;
     flex-grow: 1;
 }
 
@@ -184,7 +182,6 @@ input[type=number] {
     display: flex;
     width: calc(100% / var(--X) * var(--N) * 3);
     padding: 0 calc(var(--slide-gap)/2);
-    border: solid 2px green;
     transform: translateX(calc(100% / var(--N)/-2/3 - 100% / 3));
 
     gap: var(--slide-gap);
