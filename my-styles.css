@@ -12,6 +12,7 @@
     --box-size: 100px;
     --slide-gap: 2rem;
     --roundness: 0.25rem;
+    --image-height: 50vh;
 }
 
 #start {
@@ -26,10 +27,15 @@ body {
     flex-direction: column;
     padding: 1rem;
     gap: 1rem;
+    border: solid 2px gold;
 }
 
 main {
     flex-grow: 1;
+    background-color: gray;
+    display: flex;
+    flex-direction: column;
+    gap: var(--slide-gap);
 }
 
 table {
@@ -110,6 +116,7 @@ input[type=number] {
     position: relative;
     display: flex;
     border: solid 2px red;
+    flex-grow: 1;
 }
 
 .slider .fading {
@@ -135,7 +142,6 @@ input[type=number] {
     border: solid 2px green;
     transform: translateX(calc(100% / var(--N)/-2/3 - 100% / 3));
 
-    max-height: 65vh;
     gap: var(--slide-gap);
     transition: all 200ms ease-in-out;
 }
@@ -164,11 +170,15 @@ input[type=number] {
 
 .slider img {
     width: 100%;
+    object-fit: cover; /* Ensures the image fills the container */
+    object-position: center; 
 }
 
 .box {
     position: relative;
     min-width: var(--box-size);
+    max-height: var(--image-height);
+    object-fit: cover;
     flex: 1;
     display: flex;
     flex-direction: column;
