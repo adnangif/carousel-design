@@ -222,11 +222,11 @@ function setupVariables(n, x) {
     window.N = n
     window.X = x
     document.querySelector('.slider .slide-track').style.width = `calc(100% / ${x} * ${n} * 3)`;
-    document.querySelector('.slider .slide-track').style.transform = `translateX(calc(100% / ${n}/-2/3 - 100% / 3))`;
+    document.querySelector('.slider .slide-track').style.transform = `translateX(calc(100% / ${n}/2/3 - 100% / 3))`;
 
     removeBoxAnimation()
     setTimeout(() => {
-        handleBoxAnimationToggle(n+1, n, x)
+        handleBoxAnimationToggle(n, n, x)
     }, 100);
 
 }
