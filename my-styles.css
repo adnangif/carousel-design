@@ -131,16 +131,6 @@ input[type=number] {
 }
 
 
-@keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(calc(var(--box-size)* -1 * var(--N)));
-    }
-}
-
 .slide-title {
     font-size: 1rem;
     font-weight: 600;
@@ -180,7 +170,6 @@ input[type=number] {
 } */
 
 .slider .slide-track {
-    /* animation: scroll 4s linear infinite; */
     display: flex;
     width: calc(100% / var(--X) * var(--N) * 3);
     padding: 0 calc(var(--slide-gap)/2);
@@ -191,55 +180,69 @@ input[type=number] {
 }
 
 
-/* .slider img.slide {
-    height: auto;
-    width: calc(var(--box-size));
-    background-color: white;
-    border: solid 2px blueviolet;
-} */
-
 .slide-content {
     position: absolute;
-    bottom: 0;
     width: 100%;
     padding: 0.5rem;
+    bottom: 0;
     flex-grow: 1;
     background-color: var(--primary-bg);
     box-shadow: var(--shadow);
+    border-radius: var(--roundness);
     
     display: flex;
     flex-direction: column;
     gap: .5rem;
     scale: 1.1;
     cursor: default;
+    transition: all 200ms ease-in-out;
 }
 
-.slider img {
+.slider .box img {
     width: 100%;
+    max-height: 50vh;
     object-fit: cover; /* Ensures the image fills the container */
     object-position: center; 
+    transition: all 200ms ease-in-out;
+    border-radius: 1rem;
+    border: solid 2px gray;
 }
 
 .box {
     position: relative;
     min-width: var(--box-size);
     /* max-height: var(--image-height); */
-    border: solid 2px gray;
-    box-shadow: var(--shadow);
     object-fit: cover;
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: var(--roundness);
     /* border: solid 2px black; */
     transition: all 200ms ease-in-out;
     /* border: solid 2px pink; */
+    cursor: pointer;
+
+    &:hover img{
+        transform: scale(1.05) translateY(-1%);
+        box-shadow: var(--shadow);
+    }
+
+    &:hover .slide-content{
+        opacity: 0;
+        box-shadow: none;
+    }
 }
 
 .blurr{
     filter: blur(5px) brightness(0.5);
     transform: scale(0.8) translateY(10%);
+    z-index: 0;
+    
+    pointer-events: none;
+}
+
+.blurr .slide-content{
+    opacity: 0;
 }
 
 
