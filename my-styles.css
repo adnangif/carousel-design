@@ -39,7 +39,7 @@ main {
 }
 
 table {
-    width: 100%;
+    width: 90%;
     max-width: 500px;
     border-collapse: collapse;
     background-color: var(--primary-bg);
