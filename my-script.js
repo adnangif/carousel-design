@@ -390,7 +390,7 @@ function gotoPrevSlideAction() {
 
 function removeBoxAnimation(){
     const boxes = document.querySelectorAll('.box')
-    for(let i = 0; i < 3*window.N; i++){
+    for(let i = 0; i < boxes.length; i++){
         boxes[i].classList.add('blurr')
     }
 }
