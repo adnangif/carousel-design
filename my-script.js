@@ -31,8 +31,26 @@ function main() {
 
     handleCarouselCreation(books.slice(0,n))
     setupVariables(n, x)
+    updatePagination(0,n,x)
+
 };
 
+
+function updatePagination(current, n,x){
+    let currentSlide = current
+    const dots = document.querySelectorAll('.dot')
+
+    while(currentSlide -n >= 0){
+        currentSlide -= n
+    }
+
+    for(let i = currentSlide; i < currentSlide + x; i++){
+        console.log(`now working at pagination ${i}`)
+        dots[i%n].classList.toggle('active-dot')
+
+    }
+
+}
 
 /**
  * Returns an array of objects each with id, title, description, and photo attributes.
@@ -154,8 +172,19 @@ function handleCarouselCreation(books){
     makeSlides(books, carousel)
     makeSlides(books, carousel)
     makeSlides(books, carousel)
+    makePagination(books.length)
 }
 
+
+function makePagination(n){
+    const pagination = document.querySelector('#pagination')
+    pagination.innerHTML = ''
+    for (let i = 0; i < n; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot')
+        pagination.appendChild(dot);
+    }
+}
 function makeSlides(books, carousel){
     books.forEach(book => {
         const card = document.createElement('div');
@@ -200,6 +229,7 @@ function handleUpdate(){
     else{
         setupVariables(n, x)
         handleCarouselCreation(books.slice(0,n))
+        updatePagination(0,n,x)
     }
 }
 
@@ -345,6 +375,9 @@ function gotoNextSlideAction() {
 
     handleBoxAnimationToggle(getLeftSlideCount() + 1, N, X)
     handleBoxAnimationToggle(getLeftSlideCount() + 2, N, X)
+
+    updatePagination(getLeftSlideCount()+1, N, X)
+    updatePagination(getLeftSlideCount()+2, N, X)
     slider.style.transition = 'all 200ms ease-in-out';
     slider.style.transform = `translateX(${getCurrentTranslateX() - getSlidingWidth()}px)`;
 }
@@ -382,8 +415,11 @@ function gotoPrevSlideAction() {
 
     handleBoxAnimationToggle(getLeftSlideCount() + 1, N, X)
     handleBoxAnimationToggle(getLeftSlideCount(), N, X)
+
+    updatePagination(getLeftSlideCount()+1, N, X)
+    updatePagination(getLeftSlideCount(), N, X)
     slider.style.transition = 'all 200ms ease-in-out';
-    slider.style.transform = `translateX(${getCurrentTranslateX()+ getSlidingWidth()}px)`;
+    slider.style.transform = `translateX(${getCurrentTranslateX() + getSlidingWidth()}px)`;
 }
 
 
