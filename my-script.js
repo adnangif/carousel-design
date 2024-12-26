@@ -191,7 +191,7 @@ function makeSlides(books, carousel){
         card.classList.add('box')
         card.classList.add('blurr')
         card.innerHTML = `
-            <img class="slide" src="${window.location.pathname}photos/${book.photo}" alt="${book.title}" />
+            <img class="slide" src="./photos/${book.photo}" alt="${book.title}" />
             <div class="slide-content">
                 <h5 class="slide-title">${book.title.split(':')[0]}</h5>
                 <p class="slide-description">${clipString(book.description, 100)}</p>
