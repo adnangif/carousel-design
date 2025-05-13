@@ -1,52 +1,240 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple HTML Page</title>
+    <title>Carousel Demo</title>
     <link rel="stylesheet" href="my-styles.css">
-    <script src="my-script.js"></script>
+    <link rel="stylesheet" href="carousel-js/src/carousel.css">
+    <script>
+        // Add loading class to html until everything is loaded
+        document.documentElement.classList.add('loading');
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
         rel="stylesheet">
+    <link rel="icon" href="data:,">
 </head>
 
 <body>
     <header>
-        <h1>Assala-mu-alaikum Sir</h1>
+        <h1>Carousel Demo</h1>
     </header>
 
     <main class="container">
-        <h4 class="subtitle">Please Refresh the Page to so that the mobile responsive changes take effect</h4>
+        <h4 class="subtitle">Please refresh the page if you change device orientation or window size</h4>
 
         <div class="grid-container">
             <label for="value-of-n">Value of N:</label>
-            <input type="number" id="value-of-n" value="7" />
+            <input type="number" id="value-of-n" value="7" min="2" max="7" aria-label="Total number of items" />
         
             <label for="value-of-x">Value of X:</label>
-            <input type="number" id="value-of-x" value="3" />
+            <input type="number" id="value-of-x" value="3" min="1" max="6" aria-label="Number of visible items" />
         
-            <button id="update-btn">Update</button>
+            <button id="update-btn" aria-label="Update carousel settings">Update</button>
         </div>
 
-        <div id="start" class="slider">
-            <button class="nav-btn btn-left"><img src="icons/left-arrow.svg" /></button>
-            <button class="nav-btn btn-right"><img src="icons/right-arrow.svg"/></button>
-            <div class="fading">
-                <div id="root" class="slide-track">
-                </div>
-                <div id="pagination" class="pagination"></div>
-            </div>
+        <noscript>
+            <p class="error-message">JavaScript is required for the carousel to function. Please enable JavaScript in your browser.</p>
+        </noscript>
 
+        <div id="start" class="slider loading" aria-live="polite">
+            <div class="loading-indicator">
+                <div class="loading-spinner"></div>
+                <p>Loading...</p>
+            </div>
         </div>
     </main>
 
     <footer>
-        <p class="subtitle">&copy; 2024 My Website</p>
+        <p class="subtitle">&copy; 2024 CarouselJS</p>
     </footer>
+
+    <!-- Load carousel.js after DOM is ready -->
+    <script src="carousel-js/src/carousel.js"></script>
+    <script>
+        // Function to show error in the carousel container
+        function showCarouselError(message) {
+            const container = document.getElementById('start');
+            if (container) {
+                container.innerHTML = `<p class="error-message">${message}</p>`;
+                container.classList.remove('loading');
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remove loading class from html
+            document.documentElement.classList.remove('loading');
+            
+            // Fetch books from the JSON file
+            fetch('book-description.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(books => {
+                    // Initialize carousel with the fetched books
+                    initializeCarousel(books);
+                })
+                .catch(error => {
+                    console.error('Error loading books:', error);
+                    // Show error message to user
+                    showCarouselError(`Failed to load book data: ${error.message}. Using default books instead.`);
+                    // Fallback to the embedded books array if fetch fails
+                    setTimeout(() => initializeCarousel(getDefaultBooks()), 500);
+                });
+                
+            function initializeCarousel(books) {
+                // Get initial values
+                const nInput = document.getElementById('value-of-n');
+                const xInput = document.getElementById('value-of-x');
+                const updateBtn = document.getElementById('update-btn');
+                
+                // Initialize with default values
+                const n = parseInt(nInput.value);
+                const x = isMobileDevice() ? 1 : parseInt(xInput.value);
+                
+                // Set X input to reflect actual value if mobile
+                if (isMobileDevice()) {
+                    xInput.value = 1;
+                    xInput.max = 1; // Limit to 1 on mobile
+                }
+                
+                // Process photos to ensure they have the correct path
+                const processedBooks = books.map(book => {
+                    return {
+                        ...book,
+                        photo: book.photo.startsWith('./') ? book.photo : './photos/' + book.photo
+                    };
+                });
+                
+                // Initialize carousel
+                let carousel = null;
+                try {
+                    carousel = new CarouselJS({
+                        selector: '#start',
+                        items: processedBooks.slice(0, n),
+                        totalItems: n,
+                        visibleItems: x,
+                        leftArrowIcon: './icons/left-arrow.svg',
+                        rightArrowIcon: './icons/right-arrow.svg',
+                        onSlideChange: function(slideIndex) {
+                            console.log('Current slide:', slideIndex);
+                        }
+                    });
+                    
+                    // Handle update button click
+                    updateBtn.addEventListener('click', function() {
+                        const newN = parseInt(nInput.value);
+                        let newX = parseInt(xInput.value);
+                        
+                        if (newX < 1 || newX >= newN) {
+                            alert("X should be between 1 and N-1");
+                            newX = Math.min(Math.floor(newN / 2), isMobileDevice() ? 1 : 3);
+                            xInput.value = newX;
+                        }
+                        else if(newN > processedBooks.length) {
+                            alert("N should be less than or equal to the number of books");
+                            return;
+                        }
+                        
+                        // Update carousel with new values
+                        try {
+                            carousel.update({
+                                items: processedBooks.slice(0, newN),
+                                totalItems: newN,
+                                visibleItems: newX
+                            });
+                        } catch (error) {
+                            console.error('Error updating carousel:', error);
+                            showCarouselError(`Failed to update carousel: ${error.message}`);
+                        }
+                    });
+                    
+                    // Handle window resize to reset mobile/desktop values
+                    window.addEventListener('resize', function() {
+                        const isMobile = isMobileDevice();
+                        if (isMobile && parseInt(xInput.value) > 1) {
+                            xInput.value = 1;
+                            xInput.max = 1;
+                            if (carousel) {
+                                try {
+                                    carousel.update({
+                                        visibleItems: 1
+                                    });
+                                } catch (error) {
+                                    console.error('Error updating carousel on resize:', error);
+                                }
+                            }
+                        } else if (!isMobile) {
+                            xInput.max = 6;
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error initializing carousel:', error);
+                    showCarouselError(`Failed to initialize carousel: ${error.message}`);
+                }
+            }
+            
+            // Check if current device is mobile
+            function isMobileDevice() {
+                return window.innerWidth <= 768;
+            }
+            
+            // Fallback books array
+            function getDefaultBooks() {
+                return [
+                    {
+                        "id": 1,
+                        "title": "Way of the Wolf",
+                        "description": "Jordan Belfort—immortalized by Leonardo DiCaprio in the hit movie The Wolf of Wall Street—reveals the step-by-step sales and persuasion system proven to turn anyone into a sales-closing, money-earning rock star.",
+                        "photo": "book1.jpg"
+                    },
+                    {
+                        "id": 2,
+                        "title": "Basic Economics",
+                        "description": "Basic Economics is a citizen's guide to economics, written for those who want to understand how the economy works but have no interest in jargon or equations.",
+                        "photo": "book2.jpg"
+                    },
+                    {
+                        "id": 3,
+                        "title": "Getting to Yes: Negotiating Agreement Without Giving In",
+                        "description": "Since its original publication nearly thirty years ago, Getting to Yes has helped millions of people learn a better way to negotiate.",
+                        "photo": "book3.jpg"
+                    },
+                    {
+                        "id": 4,
+                        "title": "Economics in One Lesson",
+                        "description": "A million copy seller, Henry Hazlitt's classic primer is an essential guide to the basics of economic theory.",
+                        "photo": "book4.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "title": "Foster",
+                        "description": "An international bestseller and one of The Times' 'Top 50 Novels Published in the 21st Century,' Claire Keegan's piercing contemporary classic.",
+                        "photo": "book5.jpg"
+                    },
+                    {
+                        "id": 6,
+                        "title": "Small Things Like These",
+                        "description": "Small Things Like These is award-winning author Claire Keegan's landmark new novel.",
+                        "photo": "book6.jpg"
+                    },
+                    {
+                        "id": 7,
+                        "title": "So Late in the Day: Stories of Women and Men",
+                        "description": "From Booker Prize Finalist and bestselling author of 'pitch perfect' Small Things Like These.",
+                        "photo": "book7.jpg"
+                    }
+                ];
+            }
+        });
+    </script>
 </body>
 
 </html>

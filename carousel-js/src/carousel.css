@@ -1,0 +1,329 @@
+/**
+ * CarouselJS - A lightweight, zero-dependency JavaScript carousel library
+ * @version 1.0.1
+ * @license MIT
+ */
+
+:root {
+  --carousel-primary-bg: #f9fafb;
+  --carousel-primary-bg2: #ffffff;
+  --carousel-primary-fg: #4a00ff;
+  --carousel-primary-fg2: #3f00e7;
+  --carousel-slide-gap: 2rem;
+  --carousel-roundness: 0.25rem;
+  --carousel-image-height: 50vh;
+  --carousel-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --carousel-error-img-bg: #dddddd;
+  --carousel-error-img-text: #555555;
+}
+
+/* Slider Container */
+.slider {
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  min-height: 200px; /* Minimum height to prevent layout shift */
+}
+
+.slider .fading {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slider .slide-track {
+  display: flex;
+  padding: 0 calc(var(--carousel-slide-gap)/2);
+  gap: var(--carousel-slide-gap);
+  transition: transform 200ms ease-in-out;
+}
+
+/* Navigation Buttons */
+.nav-btn {
+  position: absolute;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  border: solid 2px white;
+  border-radius: 50%;
+  padding: 0.5rem;
+  margin: 1rem;
+  transform-origin: top center;
+  transition: background-color 200ms ease-in-out;
+  top: 50%;
+  transform: translateY(-100%);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.nav-btn img {
+  width: 20px;
+  height: 20px;
+  pointer-events: none; /* Prevent image from capturing clicks */
+}
+
+.btn-left {
+  left: 0;
+}
+
+.btn-right {
+  right: 0;
+}
+
+.btn-left:hover,
+.btn-right:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.btn-left:focus,
+.btn-right:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+/* Carousel Items */
+.slider .box {
+  position: relative;
+  object-fit: cover;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
+  min-width: 100px; /* Minimum width to prevent layout shift */
+}
+
+.slider .box img {
+  width: 100%;
+  max-height: 40vh;
+  min-height: 150px; /* Minimum height to prevent layout shift */
+  object-fit: cover; 
+  object-position: center; 
+  transition: all 200ms ease-in-out;
+  border-radius: 1rem;
+  border: solid 2px gray;
+  background-color: var(--carousel-error-img-bg); /* Background color for error state */
+}
+
+.slider .box:hover img {
+  transform: scale(1.05) translateY(-1%);
+  box-shadow: var(--carousel-shadow);
+}
+
+.slider .box:hover .slide-content {
+  opacity: 0;
+  box-shadow: none;
+}
+
+.slide-content {
+  position: absolute;
+  width: 100%;
+  padding: 0.5rem;
+  bottom: 0;
+  flex-grow: 1;
+  background-color: var(--carousel-primary-bg);
+  box-shadow: var(--carousel-shadow);
+  border-radius: var(--carousel-roundness);
+  
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  transform: scale(1.1);
+  cursor: default;
+  transition: all 200ms ease-in-out;
+  z-index: 2; /* Ensure content appears above image */
+}
+
+.slide-title {
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  color: darkred;
+  margin: 0; /* Reset margins for consistent sizing */
+}
+
+.slide-description {
+  font-size: 0.725rem;
+  color: darkslategray;
+  margin: 0; /* Reset margins for consistent sizing */
+  line-height: 1.4;
+}
+
+/* Blur Effect for Non-Active Slides */
+.blurr {
+  filter: blur(5px) brightness(0.5);
+  transform: scale(0.8) translateY(10%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.blurr .slide-content {
+  opacity: 0;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  gap: var(--carousel-slide-gap);
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  min-height: 40px; /* Minimum height to prevent layout shift */
+}
+
+.dot {
+  height: 1rem;
+  width: 1rem;
+  border-radius: 50%;
+  border: solid 2px black;
+  transition: all 200ms ease-in-out;
+  box-shadow: var(--carousel-shadow);
+  margin: 0 3px; /* Add spacing between dots */
+  cursor: not-allowed;
+}
+
+.active-dot {
+  background-color: var(--carousel-primary-fg);
+  border: solid 2px var(--carousel-primary-fg);
+}
+
+/* Accessible focus styles */
+.slider:focus-within {
+  outline: 2px solid var(--carousel-primary-fg);
+  outline-offset: 2px;
+}
+
+/* Loading state */
+.slider.loading::before {
+  content: "Loading...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--carousel-primary-fg);
+  font-weight: bold;
+  z-index: 1;
+}
+
+/* Fallback for when JavaScript is disabled */
+.no-js .slider {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.no-js .nav-btn,
+.no-js .pagination {
+  display: none;
+}
+
+.no-js .slide-track {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.no-js .blurr {
+  filter: none;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .slider .box img {
+    max-height: 30vh;
+    min-height: 120px;
+  }
+  
+  .slide-title {
+    font-size: 0.9rem;
+  }
+  
+  .slide-description {
+    font-size: 0.65rem;
+  }
+  
+  .nav-btn {
+    padding: 0.3rem;
+    width: 34px;
+    height: 34px;
+  }
+  
+  .nav-btn img {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .carousel-slide-gap {
+    --carousel-slide-gap: 1rem; /* Reduce gap on mobile */
+  }
+  
+  .dot {
+    height: 0.8rem;
+    width: 0.8rem;
+  }
+}
+
+/* Small screens */
+@media (max-width: 480px) {
+  .slider .box img {
+    max-height: 25vh;
+    min-height: 100px;
+  }
+  
+  .slide-content {
+    padding: 0.3rem;
+  }
+  
+  .slide-title {
+    font-size: 0.8rem;
+  }
+  
+  .slide-description {
+    font-size: 0.6rem;
+  }
+  
+  .nav-btn {
+    padding: 0.25rem;
+    width: 30px;
+    height: 30px;
+    margin: 0.5rem;
+  }
+  
+  .nav-btn img {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .slider {
+    height: auto;
+    overflow: visible;
+  }
+  
+  .slider .slide-track {
+    display: block;
+    transform: none !important;
+  }
+  
+  .blurr {
+    filter: none;
+    transform: none;
+    page-break-inside: avoid;
+  }
+  
+  .nav-btn, .pagination {
+    display: none;
+  }
+} 

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarouselJS Demo</title>
+  <link rel="stylesheet" href="../dist/carousel.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    
+    body {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    h1, h2 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    
+    p {
+      margin-bottom: 1.5rem;
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+    
+    .demo-section {
+      margin-bottom: 3rem;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    
+    button {
+      padding: 0.5rem 1rem;
+      background-color: #4a00ff;
+      color: white;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background-color: #3f00e7;
+    }
+    
+    .config-panel {
+      background-color: #f5f5f5;
+      padding: 1rem;
+      border-radius: 0.25rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .config-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    input, select {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 0.25rem;
+    }
+    
+    footer {
+      margin-top: 4rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+      text-align: center;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CarouselJS Demo</h1>
+    <p>A lightweight, zero-dependency JavaScript carousel library.</p>
+  </header>
+  
+  <main class="container">
+    <section class="demo-section">
+      <h2>Basic Carousel</h2>
+      <p>A simple carousel implementation with default settings.</p>
+      
+      <div class="config-panel">
+        <h3>Configuration</h3>
+        <div class="config-form">
+          <div class="form-group">
+            <label for="total-items">Total Items (N):</label>
+            <input type="number" id="total-items" value="7" min="2" max="7">
+          </div>
+          <div class="form-group">
+            <label for="visible-items">Visible Items (X):</label>
+            <input type="number" id="visible-items" value="3" min="1" max="6">
+          </div>
+          <div class="form-group">
+            <label for="auto-rotate">Auto Rotate:</label>
+            <select id="auto-rotate">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <button id="update-config">Update Configuration</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="carousel-container" style="height: 400px;"></div>
+      
+      <div class="controls">
+        <button id="prev-btn">Previous</button>
+        <button id="next-btn">Next</button>
+        <button id="start-auto">Start Auto-rotation</button>
+        <button id="stop-auto">Stop Auto-rotation</button>
+      </div>
+    </section>
+  </main>
+  
+  <footer>
+    <p>&copy; 2024 CarouselJS. Released under the MIT License.</p>
+  </footer>
+  
+  <script src="../dist/carousel.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Book data
+      const books = [
+        {
+            "id": 1,
+            "title": "Way of the Wolf",
+            "description": "Jordan Belfort—immortalized by Leonardo DiCaprio in the hit movie The Wolf of Wall Street—reveals the step-by-step sales and persuasion system proven to turn anyone into a sales-closing, money-earning rock star.",
+            "photo": "../../photos/book1.jpg"
+        },
+        {
+            "id": 2,
+            "title": "Basic Economics",
+            "description": "Basic Economics is a citizen's guide to economics, written for those who want to understand how the economy works but have no interest in jargon or equations. Bestselling economist Thomas Sowell explains the general principles underlying different economic systems: capitalist, socialist, feudal, and so on.",
+            "photo": "../../photos/book2.jpg"
+        },
+        {
+            "id": 3,
+            "title": "Getting to Yes: Negotiating Agreement Without Giving In",
+            "description": "Since its original publication nearly thirty years ago, Getting to Yes has helped millions of people learn a better way to negotiate. One of the primary business texts of the modern era, it is based on the work of the Harvard Negotiation Project, a group that deals with all levels of negotiation and conflict resolution.",
+            "photo": "../../photos/book3.jpg"
+        },
+        {
+            "id": 4,
+            "title": "Economics in One Lesson",
+            "description": "A million copy seller, Henry Hazlitt's classic primer is an essential guide to the basics of economic theory. A fundamental influence on modern libertarianism, Hazlitt defends capitalism and the free market from economic myths that persist to this day.",
+            "photo": "../../photos/book4.jpg"
+        },
+        {
+            "id": 5,
+            "title": "Foster",
+            "description": "An international bestseller and one of The Times' 'Top 50 Novels Published in the 21st Century,' Claire Keegan's piercing contemporary classic Foster is a heartbreaking story of childhood, loss, and love.",
+            "photo": "../../photos/book5.jpg"
+        },
+        {
+            "id": 6,
+            "title": "Small Things Like These",
+            "description": "Small Things Like These is award-winning author Claire Keegan's landmark new novel, a tale of one man's courage and a remarkable portrait of love and family.",
+            "photo": "../../photos/book6.jpg"
+        },
+        {
+            "id": 7,
+            "title": "So Late in the Day: Stories of Women and Men",
+            "description": "From Booker Prize Finalist and bestselling author of 'pitch perfect' (Boston Globe) Small Things Like These, comes a triptych of stories about love, lust, betrayal, and the ever-intriguing interchanges between women and men.",
+            "photo": "../../photos/book7.jpg"
+        }
+      ];
+      
+      // Get elements
+      const totalItemsInput = document.getElementById('total-items');
+      const visibleItemsInput = document.getElementById('visible-items');
+      const autoRotateSelect = document.getElementById('auto-rotate');
+      const updateConfigBtn = document.getElementById('update-config');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const startAutoBtn = document.getElementById('start-auto');
+      const stopAutoBtn = document.getElementById('stop-auto');
+      
+      // Initialize carousel
+      let carousel = new CarouselJS({
+        selector: '#carousel-container',
+        items: books,
+        totalItems: parseInt(totalItemsInput.value),
+        visibleItems: parseInt(visibleItemsInput.value),
+        autoRotate: autoRotateSelect.value === 'true',
+        onSlideChange: function(slideIndex) {
+          console.log('Changed to slide:', slideIndex);
+        }
+      });
+      
+      // Event listeners
+      updateConfigBtn.addEventListener('click', function() {
+        const totalItems = parseInt(totalItemsInput.value);
+        const visibleItems = parseInt(visibleItemsInput.value);
+        const autoRotate = autoRotateSelect.value === 'true';
+        
+        // Validate
+        if (visibleItems >= totalItems) {
+          alert('Visible items must be less than total items!');
+          return;
+        }
+        
+        // Update carousel
+        carousel.update({
+          totalItems: totalItems,
+          visibleItems: visibleItems,
+          autoRotate: autoRotate
+        });
+      });
+      
+      prevBtn.addEventListener('click', function() {
+        carousel.prev();
+      });
+      
+      nextBtn.addEventListener('click', function() {
+        carousel.next();
+      });
+      
+      startAutoBtn.addEventListener('click', function() {
+        carousel.startAutoRotation();
+      });
+      
+      stopAutoBtn.addEventListener('click', function() {
+        carousel.stopAutoRotation();
+      });
+    });
+  </script>
+</body>
+</html> 
