@@ -4,6 +4,8 @@ A beautiful, responsive book carousel demonstration built with CarouselJS, a zer
 
 ## Demo
 
+View the live demo: [https://adnangif.github.io/carousel-design/](https://adnangif.github.io/carousel-design/)
+
 This project showcases a responsive carousel of book items with configurable parameters. The carousel allows you to:
 - Set the total number of items (N)
 - Set the number of visible items (X)
